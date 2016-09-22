@@ -6,12 +6,19 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
+import android.widget.Toast;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
+import app.voice.yx.com.voicetest.util.TunnerThread;
 
 /**
  * Created by Jzh on 2016/09/19.
@@ -35,6 +42,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,
     private int secondplace  = 0;
 
     private Rect destRect2;
+
+    private TunnerThread tunner;
 
     public GameView(Context context, int mSurfaceViewWidth, int mSurfaceViewHeight) {
         super(context);
@@ -101,7 +110,32 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,
             }
         }
     }
+    private Handler handler = new Handler();
+    private Runnable callback = new Runnable() {
 
+        public void run() {
+            updateText(tunner.getCurrentFrequency());
+        }
+    };
+
+    private void updateText(double currentFrequency) {
+        while (currentFrequency < 82.41) {
+            currentFrequency = currentFrequency * 2;
+        }
+        while (currentFrequency > 164.81) {
+            currentFrequency = currentFrequency * 0.5;
+        }
+        //currentFrequency即为通过快速傅立叶变换计算出的声音频率。
+        BigDecimal a = new BigDecimal(currentFrequency);
+        BigDecimal result = a.setScale(2, RoundingMode.DOWN);
+        Toast.makeText(icontext,
+                "当前声音频率:"+String.valueOf(result), Toast.LENGTH_LONG).show();
+    }
+
+    private void startTunning() {
+        tunner = new TunnerThread(handler, callback);
+        tunner.start();
+    }
 
     private void drawView() {
         try {
@@ -177,8 +211,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        new Thread(this).start();
         isRunning = true;
+        new Thread(this).start();
+        onRecord(isRunning);
 
     }
 
@@ -190,6 +225,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         isRunning = false;
+        new Thread(this).stop();
+        new Thread(this).destroy();
+        tunner.close();
+        tunner.destroy();
     }
 
     @Override
@@ -204,11 +243,29 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,
 
         if (isRunning) {
             isRunning = false;
+            onRecord(isRunning);
+            Toast.makeText(icontext,
+                    "暂停动画，录音继续", Toast.LENGTH_LONG).show();
         } else {
             isRunning = true;
+            //onRecord(isRunning);
+            Toast.makeText(icontext,
+                    "暂停动画，录音继续", Toast.LENGTH_LONG).show();
+
             new Thread(this).start();
         }
         return super.onTouchEvent(event);
     }
 
+    private void onRecord(boolean startRecording) {
+        if (startRecording) {
+            startTunning();
+        } else {
+            stopTunning();
+        }
+    }
+
+    private void stopTunning() {
+        //tunner.stop();
+    }
 }

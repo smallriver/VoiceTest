@@ -13,14 +13,6 @@
 # limitations under the License.
 #
 
-LOCAL_PATH := $(call my-dir)
+APP_PROJECT_PATH := $(call my-dir)/project
+APP_MODULES      := nativebt
 
-include $(CLEAR_VARS)
-
-LOCAL_MODULE    := processRawData
-LOCAL_SRC_FILES :=  processRawData.c
-
-LOCAL_DEFAULT_CPP_EXTENSION := cpp
-
-#include $(BUILD_EXECUTABLE)
-include $(BUILD_SHARED_LIBRARY)

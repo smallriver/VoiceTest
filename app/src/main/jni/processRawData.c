@@ -368,7 +368,8 @@ double singleHanning(double value,int i,int windowLength){
                     (windowLength - 1))));
 }
 
-jdouble Java_com_houxiyang_guitar_Utils_TunnerThread_processSampleData(JNIEnv*  env,jobject thiz,jbyteArray sample,jint sampleRate){
+
+jdouble  Java_app_voice_yx_com_voicetest_util_TunnerThread_processSampleData(JNIEnv*  env,jobject thiz,jbyteArray sample,jint sampleRate){
     jsize sampleLength = (*env)->GetArrayLength(env,sample);
     jbyte* localSample = (*env)->GetByteArrayElements(env,sample,0);
     double padSample[sampleLength/2];
