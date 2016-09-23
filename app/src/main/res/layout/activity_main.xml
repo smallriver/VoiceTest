@@ -4,6 +4,12 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     >
+<app.voice.yx.com.voicetest.GameView
+    android:id="@+id/game_view"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
 
+</app.voice.yx.com.voicetest.GameView>
 
 </LinearLayout>

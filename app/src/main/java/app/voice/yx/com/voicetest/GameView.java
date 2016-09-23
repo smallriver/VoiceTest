@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -66,6 +67,30 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,
         videoplayer2 = decodeBitmap(context, R.mipmap.videoyellow, 70, height / 6);
     }
 
+    public GameView(Context context) {
+        super(context);
+        DisplayMetrics dm = new DisplayMetrics();
+       // context.getWindowManager().getDefaultDisplay().getMetrics(dm);
+        int mSurfaceViewWidth = dm.widthPixels;
+        int mSurfaceViewHeight = dm.heightPixels;
+        icontext = context;
+        this.setFocusable(true);
+        with = mSurfaceViewWidth;
+        height = mSurfaceViewHeight;
+        dy = 0;
+        dy2 = -mSurfaceViewHeight;
+        holder = this.getHolder();//这个this指的是这个Surface
+        holder.addCallback(this); //这个this表示实现了Callback接口
+        srcRect = new Rect(0, 0, mSurfaceViewWidth, mSurfaceViewHeight);//原始图片大小
+        destRect = new Rect(0, 0, mSurfaceViewWidth, mSurfaceViewHeight);//目标屏幕大小. 并带有移动变量dy. 对应图片1
+        destRect2 = new Rect(0, 0, mSurfaceViewWidth, mSurfaceViewHeight);//屏幕上方的图片,对应图片2
+
+        background = decodeBitmap(context, R.mipmap.backup, mSurfaceViewWidth, mSurfaceViewHeight);
+
+        lineplayer = decodeBitmap(context, R.mipmap.heng, mSurfaceViewWidth, 10);
+        videoplayer = decodeBitmap(context, R.mipmap.videoyellow, 70, height / 6);
+        videoplayer2 = decodeBitmap(context, R.mipmap.videoyellow, 70, height / 6);
+    }
 
 
     /**
@@ -129,7 +154,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,
         BigDecimal a = new BigDecimal(currentFrequency);
         BigDecimal result = a.setScale(2, RoundingMode.DOWN);
         Toast.makeText(icontext,
-                "当前声音频率:"+String.valueOf(result), Toast.LENGTH_LONG).show();
+                "当前声音频率:"+String.valueOf(result)+"\n"
+                +"当前声音长度"+Content.bufferlength +"\n"
+                +"当前计算时间"+Content.subtime+"ms", Toast.LENGTH_LONG).show();
     }
 
     private void startTunning() {
