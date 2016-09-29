@@ -5,6 +5,8 @@ package app.voice.yx.com.voicetest;
  */
 
 public class Content {
-    public static  int bufferlength = 0;
+    public static int bufferlength = 0;
     public static long subtime =0;
+    public static String datetime = "";
+    public  static int sampleRate = 0 ;
 }

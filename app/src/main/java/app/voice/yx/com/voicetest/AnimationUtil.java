@@ -31,7 +31,6 @@ public class AnimationUtil {
 				Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
 				7.0f, Animation.RELATIVE_TO_SELF, 0.0f);
 		mHiddenAction.setDuration(100);
-
 //		TranslateAnimation animation = new TranslateAnimation(0, 0,300, 300);
 //		animation.setDuration(500);
 		return mHiddenAction;

@@ -7,8 +7,7 @@ import android.os.PowerManager.WakeLock;
 public class KeepScreenon {
 	
 	 private static WakeLock wl;  
-     
-	    /** 
+	    /**
 	     * 保持屏幕唤醒状态（即背景灯不熄灭） 
 	     * @param on 是否唤醒 
 	     */  
